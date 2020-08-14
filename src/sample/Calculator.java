@@ -6,11 +6,6 @@ public class Calculator {
     public static void main (String[] args) {
         System.out.println("Welcome to the calculator");
 
-        //Generate 2 random numbers
-        /*Random random = new Random();
-        int randomNum1 = random.nextInt(100);
-        int randomNum2 = random.nextInt(100);*/
-
         //Choose Number 1
         System.out.println("Input your first number");
         Scanner scanner = new Scanner(System.in);
