@@ -1,16 +1,18 @@
 package sample;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.List;
 
 public class Calculator {
     public static void main(String[] args) {
         System.out.println("Welcome to the calculator");
         System.out.println("=========================");
 
-        //Choose and Operator
+        //Choose an Operator
         Calculation calculation = chooseCalculation();
 
         //Choose Numbers
-        int[] numbers = chooseNumbers();
+        List<Integer> numbers = chooseNumbers();
 
         //Calculate and Output Result
         int result = calculate(calculation, numbers);
@@ -34,28 +36,26 @@ public class Calculator {
                 throw new IllegalArgumentException("You must enter an operator");
         }
     }
-    private static int[] chooseNumbers() {
-        //Ask for the amount of numbers
-        System.out.println("How many numbers?");
+    private static List<Integer> chooseNumbers() {
+        //Get First Number and Create List
+        System.out.println("Input a number: ");
         Scanner scanner = new Scanner(System.in);
-        int numberAmount = scanner.nextInt();
+        List<Integer> numbers = new ArrayList<>();
 
-        //Get the numbers
-        int[] numbers = new int[numberAmount];
-        for (int i = 1; i <= numberAmount; i++) {
-            System.out.println("Input number " + i + ": ");
-            numbers[i-1] = scanner.nextInt();
+        while (scanner.hasNextInt()) {
+            numbers.add(scanner.nextInt());
+            System.out.println("Input your next number or 'done': ");
         }
 
         //return the numbers
         return numbers;
     }
 
-    private static int calculate (Calculation calculation, int[] numbers) {
+    private static int calculate (Calculation calculation, List<Integer> numbers) {
         //Calculates result
-        int result = numbers[0];
-        for (int j = 0; j < numbers.length-1; j++) {
-            result = calculation.calculate(result, numbers[j+1]);
+        int result = numbers.get(0);
+        for (int j = 0; j < numbers.size()-1; j++) {
+            result = calculation.calculate(result, numbers.get(j+1));
         }
 
         //Returns result
