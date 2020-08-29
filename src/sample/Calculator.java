@@ -1,22 +1,31 @@
 package sample;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
+import java.io.File;
+import java.io.FileWriter;
 
 public class Calculator {
-    public static void main(String[] args) {
+    private static final String RESULT_LOGGER = "resultLogger.log";
+
+    public static void main(String[] args) throws IOException {
         System.out.println("Welcome to the calculator");
         System.out.println("=========================");
 
         //Choose an Operator
         Calculation calculation = chooseCalculation();
 
-        //Choose Numbers
-        List<Integer> numbers = chooseNumbers();
+        //Read File to Get Numbers
+        List<Integer> numbers = readNumbers();
 
         //Calculate and Output Result
         int result = calculate(calculation, numbers);
         System.out.println("Result = " + result);
+
+        //Write Result to File
+        writeResult(result);
     }
 
     private static Calculation chooseCalculation() {
@@ -60,5 +69,32 @@ public class Calculator {
 
         //Returns result
         return result;
+    }
+
+    private static List<Integer> readNumbers() throws FileNotFoundException {
+        //Asks user for file name
+        System.out.println("Enter a file: ");
+        Scanner scanner = new Scanner(System.in);
+        String fileName = scanner.next();
+
+        //Reads File
+        File file = new File(fileName);
+        try (Scanner fileScanner = new Scanner(file)) {
+            List<Integer> numbers = new ArrayList<>();
+
+            //Adds Next Number to the List
+            while (fileScanner.hasNext()) {
+                numbers.add(Integer.valueOf(fileScanner.next()));
+            }
+
+            //Returns the List
+            return numbers;
+        }
+    }
+
+    private static void writeResult (int result) throws IOException {
+        try (FileWriter fileWriter = new FileWriter(RESULT_LOGGER, true)) {
+            fileWriter.write("Result: " + result + "\n");
+        }
     }
 }
