@@ -10,22 +10,46 @@ import java.io.FileWriter;
 public class Calculator {
     private static final String RESULT_LOGGER = "resultLogger.log";
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         System.out.println("Welcome to the calculator");
         System.out.println("=========================");
 
-        //Choose an Operator
-        Calculation calculation = chooseCalculation();
+        while (true) {
+            //Choose an Operator
+            Calculation calculation = null;
+            try {
+                calculation = chooseCalculation();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
 
-        //Read File to Get Numbers
-        List<Integer> numbers = readNumbers();
+            //Read File to Get Numbers
+            List<Integer> numbers = null;
+            try {
+                numbers = readNumbers();
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found");
+                continue;
+            }
 
-        //Calculate and Output Result
-        int result = calculate(calculation, numbers);
-        System.out.println("Result = " + result);
+            //Calculate Result
+            int result = calculate(calculation, numbers);
 
-        //Write Result to File
-        writeResult(result);
+            //Write to File and Print Result
+            try {
+                writeResult(result);
+            } catch (IOException e) {
+                System.out.println("Could not write to file");
+            }
+            System.out.println("Result = " + result);
+
+            System.out.println("Perform another calculation? (y/n)");
+            Scanner scanner = new Scanner(System.in);
+            if (!scanner.next().startsWith("y")) {
+                break;
+            }
+        }
     }
 
     private static Calculation chooseCalculation() {
